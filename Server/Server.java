@@ -195,8 +195,8 @@ class HelloImpl extends HelloPOA {
     public String transfer(String filename)
     {
         try {
-            File f = new File(filename);
-            FileInputStream fis = new FileInputStream(filename);
+            File f = new File("RecordsDir/" + filename);
+            FileInputStream fis = new FileInputStream(f);
             int i = fis.read();
             String out = "";
             while(i != -1)
@@ -208,11 +208,13 @@ class HelloImpl extends HelloPOA {
         }
         catch (FileNotFoundException e)
         {
+            e.printStackTrace();
             return "";
             //Crap;
         }
         catch (IOException e)
         {
+            e.printStackTrace();
             return "";
             //Crap;
         }
