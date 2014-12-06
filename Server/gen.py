@@ -1,10 +1,12 @@
 import random
 
 sizeOfRecords = 64
-numOfRecords = 1
-f = open("Records.txt", "w")
+numOfRecords = 10
+f = open("Records3.txt", "w")
 string = ""
-for x in range(0, numOfRecords*sizeOfRecords):
-	string += chr(random.randint(33, 122))
-f.write(string + '\n')
+for _ in range(0, numOfRecords):
+	for _ in range(0, sizeOfRecords)
+            string += chr(random.randint(33, 122))
+        string += '\n'
+f.write(string)
  

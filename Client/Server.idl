@@ -14,5 +14,9 @@ module Server
 		void getResponse(in long statusCode, in string responseIP);
 		
 		void startConnectWeb();
+		
+		void ping();
+		
+		string getIP();
 	};
 };

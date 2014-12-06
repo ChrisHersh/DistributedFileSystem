@@ -83,7 +83,11 @@ class HelloImpl extends HelloPOA {
         String minPingIP = "";
         for(String s : locations.keySet())
         {
-            double ping = ping(s);
+            double start = System.nanoTime();
+            locations.get(s).doPing();
+            double end = System.nanoTime();
+            
+            double ping = end - start;
             if(ping < minPing)
             {
                 minPing = ping;
@@ -100,8 +104,6 @@ class HelloImpl extends HelloPOA {
             FileOutputStream output = new FileOutputStream(file);
             output.write(text.getBytes());
             output.close();
-            
-
             
             return true;
         } catch ( IOException e ) {
@@ -125,51 +127,51 @@ class HelloImpl extends HelloPOA {
     
     public boolean modifyRecord(int index, String newRecord)
     {
-			String after = "";
-			String before = "";
-			try
-			{
-					
-					String changedString = readRecord(index);
-					r.close();
-					Scanner sc = new Scanner(activeFile);
-					String line = "";
-					while(sc.hasNext())
-					{
-						line = sc.nextLine();
-						if(line.equals(changedString))
-						{	
-							break;
-						}
-						System.out.println("Found a line before");
-						before += line;
-					}
-					System.out.println("Found wanted String");
-					while(sc.hasNext())
-					{
-		       	line = sc.nextLine();
-		       	if(line.equals(changedString))
-		       	{
-           		break;
-		       	}
-			System.out.println("Found a line after");
-		       	after += line;
-					}
-          newRecord += '\n';
-          
-					r = new RandomAccessFile(activeFile, "rw");
-					r.setLength(0);
-          r.seek(0);
-    			r.writeChars(before);
-    			r.writeChars(newRecord);
-    			r.writeChars(after);
-          return true;
-      }
-      catch(IOException e)
-      {
-	  e.printStackTrace();
-          return false;
-      }
+        String after = "";
+        String before = "";
+        try
+        {  
+            String changedString = readRecord(index);
+            r.close();
+            Scanner sc = new Scanner(activeFile);
+            String line = "";
+            while(sc.hasNext())
+            {
+                line = sc.nextLine();
+                if(line.equals(changedString))
+                    break;
+                System.out.println("Found a line before");
+                before += line + '\n';
+            }
+            
+            System.out.println("Found wanted String");
+            
+            while(sc.hasNext())
+            {
+                line = sc.nextLine();
+                if(line.equals(changedString))
+                    break;
+                System.out.println("Found a line after");
+                after += line + '\n';
+            }
+            newRecord += '\n';
+
+            try {
+            Files.delete("RecordsDir/" + filename);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            
+            writeFile(filename, before + newRecord + after);
+            
+            r = new RandomAccessFile(activeFile, "r");
+            return true;
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+            return false;
+        }
     }
     
     public String readRecord(int index)
@@ -182,7 +184,7 @@ class HelloImpl extends HelloPOA {
         }
         catch(IOException e)
         {
-	     e.printStackTrace();
+	    e.printStackTrace();
             return "";
         }
     }
@@ -222,22 +224,8 @@ class HelloImpl extends HelloPOA {
     
     public void getResponse(int statusCode, String responseIP)
     {
-
         if(statusCode == 1)
             locationsWithFile.add(responseIP);
-    }
-
-    /**
-     * The relavent information in a ping looks like this:
-     *
-     * rtt min/avg/max/mdev = 18.635/18.677/18.720/0.143 ms
-     *
-     * This method splits on the '=' then on the '/'s
-     * The second element of the second split is then the average ping for that server
-    **/
-    public double ping(String server)
-    {
-        return locations.get(server).doPing();
     }
     
     /**
@@ -253,30 +241,28 @@ class HelloImpl extends HelloPOA {
             for(int i = 0; i < ipAddresses.length; i++)
             {
                 System.out.println("Trying to connect to " + ipAddresses[i]);
-//                 try {
-//                     ORB orb = ORB.init(new String[]{"-ORBInitialPort", initialPort, "-port", port, "-ORBInitialHost", ipAddresses[i]}, null);
-//                     org.omg.CORBA.Object objRef = orb.resolve_initial_references("NameService");
-//                     NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
-//                     String name = "Hello";
-//                     locations.put(ipAddresses[i], HelloHelper.narrow(ncRef.resolve_str(name)));
-//                     
-//                     locations.get(ipAddresses[i]).startConnectWeb();
-//                     
-//                     System.out.println("Connection to " + ipAddresses[i] + " is Okay!");
-//                 }
-//                 catch (Exception e)
-//                 {
-//                     System.out.println("Issue connecting to server: " + ipAddresses[i]);
-//                     e.printStackTrace();
-//                 }
                 String[] args = new String[]{"-ORBInitialPort", initialPort, "-port", port, "-ORBInitialHost", ipAddresses[i]};
                 locations.put(ipAddresses[i], new ServerClient(args, ipAddresses[i]));
 		System.out.println(locations.get(ipAddresses[i].toString()));
-                //locations.get(ipAddresses[i]).startConnectWeb();
             }
         }
     }
     
+    public String getIP()
+    {
+        return thisIP;
+    }
+    
+    public void ping()
+    {
+        //Simply see how responsive this server is
+        //Just dummy code to test the server
+        int i = 3*5*8+3;
+        String s = "";
+        s += "1";
+        s += "2";
+        return;
+    }
 }
 
 

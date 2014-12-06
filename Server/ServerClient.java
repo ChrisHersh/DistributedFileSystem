@@ -23,14 +23,18 @@ public class ServerClient
             String name = "Hello";
             helloImpl = HelloHelper.narrow(ncRef.resolve_str(name));
 
+            String realTargetIP = helloImpl.getIP();
             
-            System.out.println("Obtained a handle on server object: " + targetIP);
+            if(realTargetIP.equals(targetIP))
+                System.out.println("Connection to " + targetIP + " seemingly OK!");
+            else
+                System.out.println("Attempted to connect to " + targetIP + " really got " + realTargetIP);
         
             helloImpl.startConnectWeb();
         
         } catch (Exception e) {
             System.out.println("Issue connecting to : " + targetIP);
-            System.out.println("ERROR : " + e) ;
+            System.out.println("ERROR : " + e);
             e.printStackTrace();
           }
     }
@@ -55,9 +59,9 @@ public class ServerClient
         helloImpl.startConnectWeb();
     }
     
-    public int doPing()
+    public void doPing()
     {
-        return 100;
+        helloImpl.ping();
     }
     
     @Override
