@@ -6,6 +6,7 @@ import org.omg.PortableServer.*;
 import org.omg.PortableServer.POA;
 import java.io.*;
 import java.util.*;
+import java.nio.file.*;
 
 
 class HelloImpl extends HelloPOA {
@@ -127,6 +128,7 @@ class HelloImpl extends HelloPOA {
     
     public boolean modifyRecord(int index, String newRecord)
     {
+        String filename = activeFile.getName();
         String after = "";
         String before = "";
         try
@@ -157,12 +159,12 @@ class HelloImpl extends HelloPOA {
             newRecord += '\n';
 
             try {
-            Files.delete("RecordsDir/" + filename);
+                Files.delete(FileSystems.getDefault().getPath("RecordsDir", filename));     
             } catch (Exception e) {
                 e.printStackTrace();
             }
             
-            writeFile(filename, before + newRecord + after);
+            writeFile("RecordsDir/" + filename, before + newRecord + after);
             
             r = new RandomAccessFile(activeFile, "r");
             return true;
@@ -178,7 +180,7 @@ class HelloImpl extends HelloPOA {
     {
         try{
             byte[] buff = new byte[sizeOfRecord-1];
-            r.seek(index*(sizeOfRecord-1));
+            r.seek(index*(sizeOfRecord));
             r.read(buff, 0, sizeOfRecord-1);
             return new String(buff);
         }
