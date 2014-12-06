@@ -17,12 +17,12 @@ class HelloImpl extends HelloPOA {
     
     //In bytes/characters
     //1 for the newline, remove if not using newlines
-    public static int sizeOfRecord = 64 + 1;
+    public static int sizeOfRecord = (64*2) + 1;
     
     public static double timeout = .5;    
     
-    public static String thisIP = "dfsJapan";
-    public static String[] ipAddresses = new String[]{"dfsIreland"};
+    public static String thisIP = "157.160.36.13";
+    public static String[] ipAddresses = new String[]{};
     public static HashMap<String, ServerClient> locations = new HashMap<String, ServerClient>();
     public static String initialPort = "1090";
     public static String port = "1089";
@@ -90,15 +90,15 @@ class HelloImpl extends HelloPOA {
                 minPingIP = s;
             }
         }
-        return writeFile(filename, locations.get(minPingIP).doTransfer(filename));
+        return writeFile(filename, locations.get(minPingIP).doTransfer(minPingIP));
     }
     
     public boolean writeFile(String filename, String text)
     {
         try {
-            File file = new File("RecordsDir/" + filename);
-            FileOutputStream output = new FileOutputStream(file);
-            output.write(text.getBytes());
+            File file = new File(filename);
+            BufferedWriter output = new BufferedWriter(new FileWriter(file));
+            output.write(text);
             output.close();
             
 
@@ -129,9 +129,8 @@ class HelloImpl extends HelloPOA {
 			String before = "";
 			try
 			{
-					
-					String changedString = readRecord(index);
 					r.close();
+					String changedString = readRecord(index);
 					Scanner sc = new Scanner(activeFile);
 					String line = "";
 					while(sc.hasNext())
@@ -141,10 +140,8 @@ class HelloImpl extends HelloPOA {
 						{	
 							break;
 						}
-						System.out.println("Found a line before");
 						before += line;
 					}
-					System.out.println("Found wanted String");
 					while(sc.hasNext())
 					{
 		       	line = sc.nextLine();
@@ -152,7 +149,6 @@ class HelloImpl extends HelloPOA {
 		       	{
            		break;
 		       	}
-			System.out.println("Found a line after");
 		       	after += line;
 					}
           newRecord += '\n';
@@ -167,7 +163,6 @@ class HelloImpl extends HelloPOA {
       }
       catch(IOException e)
       {
-	  e.printStackTrace();
           return false;
       }
     }
@@ -176,14 +171,13 @@ class HelloImpl extends HelloPOA {
     {
         try{
             byte[] buff = new byte[sizeOfRecord-1];
-            r.seek(index*(sizeOfRecord-1));
+            r.seek(index*sizeOfRecord-1);
             r.read(buff, 0, sizeOfRecord-1);
             return new String(buff);
         }
         catch(IOException e)
         {
-	     e.printStackTrace();
-            return "";
+            return null;
         }
     }
 

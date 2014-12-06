@@ -1,0 +1,18 @@
+module Server
+{
+	interface Hello
+	{
+		boolean open(in string filename);
+		void request(in string filename, in string requesteeIP);
+		
+		string transfer(in string filename);
+		boolean modifyRecord(in long record, in string newRecord);
+		string readRecord(in long recordNum);
+
+		boolean changeActiveFile(in string newFileName);
+		
+		void getResponse(in long statusCode, in string responseIP);
+		
+		void startConnectWeb();
+	};
+};
