@@ -34,7 +34,7 @@ public class Client
         
         helloImpl.open(fileName);
         
-        System.out.println("What you want?");
+        System.out.println("What you want? (1 is read, 2 is write, 3 is change opened file)");
         int selection = s.nextInt();
         
         while(true)
@@ -59,34 +59,6 @@ public class Client
             System.out.println("What you want?");
             selection = s.nextInt();
         }
-        
-//         System.out.print("Please enter the record number you want (type exit to quit): ");
-//         int recordNum = 0;
-//         boolean exit = false;
-//         try
-//         {
-//             recordNum = s.nextInt();
-//         }
-//         catch (InputMismatchException e)
-//         {
-//             exit = true;
-//         }
-//         
-//         while(!exit)
-//         {
-//             System.out.println(helloImpl.readRecord(recordNum));
-//             
-//             System.out.print("Please enter the record number you want (type exit to quit): ");
-//             exit = false;
-//             try
-//             {
-//                 recordNum = s.nextInt();
-//             }
-//             catch (InputMismatchException e)
-//             {
-//                 exit = true;
-//             }
-//         }
 
         } catch (Exception e) {
           System.out.println("ERROR : " + e) ;

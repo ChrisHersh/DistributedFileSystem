@@ -18,7 +18,7 @@ class HelloImpl extends HelloPOA {
     
     //In bytes/characters
     //1 for the newline, remove if not using newlines
-    public static int sizeOfRecord = 64 + 1;
+    public static int sizeOfRecord = 10 + 1;
     
     public static double timeout = .5;    
     

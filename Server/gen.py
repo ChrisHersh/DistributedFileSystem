@@ -1,6 +1,6 @@
 import random
 
-sizeOfRecords = 64
+sizeOfRecords = 10
 numOfRecords = 10
 f = open("Records3.txt", "w")
 string = ""
