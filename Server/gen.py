@@ -2,7 +2,7 @@ import random
 
 sizeOfRecords = 10
 numOfRecords = 10
-f = open("Records3.txt", "w")
+f = open("RecordsDir/Records3.txt", "w")
 string = ""
 for _ in range(0, numOfRecords):
 	for _ in range(0, sizeOfRecords)

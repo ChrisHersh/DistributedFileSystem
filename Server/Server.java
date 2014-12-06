@@ -164,7 +164,7 @@ class HelloImpl extends HelloPOA {
                 e.printStackTrace();
             }
             
-            writeFile("RecordsDir/" + filename, before + newRecord + after);
+            writeFile(filename, before + newRecord + after);
             
             r = new RandomAccessFile(activeFile, "r");
             return true;
