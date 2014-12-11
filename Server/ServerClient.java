@@ -44,14 +44,14 @@ public class ServerClient
         return helloImpl.transfer(filename);
     }
     
-    public void doRequest(String filename, String thisIP)
+    public void doRequest(String filename, String thisIP, int key)
     {
-        helloImpl.request(filename, thisIP);
+        helloImpl.request(filename, thisIP, key);
     }
     
-    public void sendResponse(int statusCode, String responseIP)
+    public void sendResponse(int statusCode, String responseIP, int key)
     {
-        helloImpl.getResponse(statusCode, responseIP);
+        helloImpl.getResponse(statusCode, responseIP, key);
     }
 
     public void startConnectWeb()
@@ -70,4 +70,13 @@ public class ServerClient
         return targetIP;
     }
     
+    public String getLocalFiles()
+    {
+        return helloImpl.getLocalFiles();
+    }
+    
+    public void sendDelete(String filename, String ip)
+    {
+        helloImpl.deleteFile(filename, ip);
+    }
 } 

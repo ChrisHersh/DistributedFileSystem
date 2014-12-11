@@ -2,21 +2,28 @@ module Server
 {
 	interface Hello
 	{
-		boolean open(in string filename);
-		void request(in string filename, in string requesteeIP);
+		boolean open(in string filename, in long key);
+		void request(in string filename, in string requesteeIP, in long key);
 		
 		string transfer(in string filename);
-		boolean modifyRecord(in long record, in string newRecord);
-		string readRecord(in long recordNum);
+		boolean modifyRecord(in long record, in string newRecord, in long key);
+		string readRecord(in long recordNum, in long key);
 
-		boolean changeActiveFile(in string newFileName);
+		boolean changeActiveFile(in string newFileName, in long key);
 		
-		void getResponse(in long statusCode, in string responseIP);
+		void getResponse(in long statusCode, in string responseIP, in long key);
 		
 		void startConnectWeb();
 		
 		void ping();
 		
 		string getIP();
+		
+		string getLocalFiles();
+                string getAllKnownFiles();
+                
+                void sendDeleteSignal(in string filename, in long key);
+                void deleteFile(in string filename, in string requestee);
+                void clientQuit(in long key);
 	};
 };
