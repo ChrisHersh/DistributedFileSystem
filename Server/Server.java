@@ -36,6 +36,10 @@ class HelloImpl extends HelloPOA {
     public HashMap<Integer, File> activeFile = new HashMap<Integer, File>();
     public HashMap<Integer, RandomAccessFile> r = new HashMap<Integer, RandomAccessFile>();
   
+    /**
+     *Opens a file for the given user
+     *
+     */
     public boolean open(String filename, int key)
     {
         if(!Server.localFiles.contains(filename))
@@ -58,7 +62,9 @@ class HelloImpl extends HelloPOA {
         }
     }
     
-    //Not sure if this is what she wants for the broadcast for requesting files
+    /**
+     * Broadcasts to the other servers
+     */
     public boolean makeRequestBroadcast(String filename, int key)
     {
         locationsWithFile.put(key, new HashSet<String>());
@@ -298,12 +304,23 @@ class HelloImpl extends HelloPOA {
         {
             locations.get(s).sendDelete(filename, Server.thisIP);
         }
+        
+        for(Integer i : activeFile.keySet())
+        {
+            if(activeFile.get(i).getName().equals(filename))
+            {
+                changeActiveFile(filename, i);
+            }
+        }
     }
     
     public void deleteFile(String filename, String requestee)
     {
         try {
             Files.delete(FileSystems.getDefault().getPath("RecordsDir", filename));
+            
+            System.out.println("Now requesting an update transfer from " + requestee);
+            
             writeFile(filename, locations.get(requestee).doTransfer(filename));
             
             for(Integer i : activeFile.keySet())
@@ -404,8 +421,7 @@ public class Server {
             s = new Scanner(new File("ips.txt")); 
         } catch (FileNotFoundException e) {
             System.out.println("This server needs an ips.txt file, server will now crash, have a nice day");
-            Integer.parseInt("Crash"); //Kills the server, easier than dealing with it otherwise
-            //System.exit is for pansies who try to avoid crashing
+            System.exit(-1);
         }
             
         thisIP = s.nextLine();
